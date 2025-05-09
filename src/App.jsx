@@ -9,17 +9,28 @@ export default function App() {
   const [loading, setLoading] = useState(false);
 
   const generateFlip = async () => {
-    setLoading(true);
-    setFlip('');
+  setLoading(true);
+  setFlip('');
+  try {
     const res = await fetch('/api/flip', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ input, tone }),
     });
+
     const data = await res.json();
-    setFlip(data.flip);
-    setLoading(false);
-  };
+
+    if (res.ok) {
+      setFlip(data.flip);
+    } else {
+      setFlip(`Error: ${data.error || 'Something went wrong'}`);
+    }
+  } catch (err) {
+    setFlip(`Error: ${err.message}`);
+  }
+
+  setLoading(false);
+};
 
   return (
     <div style={{ padding: '2rem', maxWidth: '600px', margin: 'auto' }}>

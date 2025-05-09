@@ -9,28 +9,28 @@ export default function App() {
   const [loading, setLoading] = useState(false);
 
   const generateFlip = async () => {
-  setLoading(true);
-  setFlip('');
-  try {
-    const res = await fetch('/api/flip', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ input, tone }),
-    });
+    setLoading(true);
+    setFlip('');
+    try {
+      const res = await fetch('/api/flip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input, tone }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-      setFlip(data.flip);
-    } else {
-      setFlip(`Error: ${data.error || 'Something went wrong'}`);
+      if (res.ok) {
+        setFlip(data.flip);
+      } else {
+        setFlip(`Error: ${data.error || 'Something went wrong'}`);
+      }
+    } catch (err) {
+      setFlip(`Error: ${err.message}`);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    setFlip(`Error: ${err.message}`);
-  }
-
-  setLoading(false);
-};
+  };
 
   return (
     <div style={{ padding: '2rem', maxWidth: '600px', margin: 'auto' }}>
@@ -52,6 +52,7 @@ export default function App() {
       <button onClick={generateFlip} disabled={loading || !input}>
         {loading ? 'Flipping...' : 'Flip It'}
       </button>
+
       {flip && (
         <div style={{ marginTop: '2rem', background: '#eee', padding: '1rem' }}>
           <strong>Flip:</strong>

@@ -1,4 +1,33 @@
 export default async function handler(req, res) {
+ console.log('🔥 API route hit');
+  console.log('Method:', req.method);
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  let input, tone;
+
+  try {
+    ({ input, tone } = req.body);
+    console.log('Input:', input);
+    console.log('Tone:', tone);
+  } catch (e) {
+    console.error('❌ Failed to parse req.body:', e);
+    return res.status(400).json({ error: 'Invalid request body' });
+  }
+
+  if (!process.env.OPENAI_API_KEY) {
+    console.error('❌ No OpenAI API key found');
+    return res.status(500).json({ error: 'Missing OpenAI API key' });
+  }
+
+  if (!input || !tone) {
+    return res.status(400).json({ error: 'Missing input or tone' });
+  }
+
+  // continue with OpenAI fetch...
+  
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }

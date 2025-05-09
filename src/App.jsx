@@ -12,7 +12,7 @@ export default function App() {
     setLoading(true);
     setFlip('');
     try {
-      const res = await fetch('/api/flip', {
+      const res = await fetch('/api/flip-new', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ input, tone }),

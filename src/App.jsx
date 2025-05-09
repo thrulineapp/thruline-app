@@ -33,14 +33,14 @@ export default function App() {
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '600px', margin: 'auto' }}>
-      <h1>Thruline</h1>
+    <div style={{ padding: '2rem', maxWidth: '600px', margin: 'auto', fontFamily: 'sans-serif' }}>
+      <h1>Flip the Script</h1>
       <p>What’s messing with your head today?</p>
       <textarea
         placeholder="Type your thought here..."
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        style={{ width: '100%', minHeight: '100px', padding: '1rem' }}
+        style={{ width: '100%', minHeight: '100px', padding: '1rem', fontSize: '1rem' }}
       />
       <br />
       <select value={tone} onChange={(e) => setTone(e.target.value)}>
@@ -54,7 +54,7 @@ export default function App() {
       </button>
 
       {flip && (
-        <div style={{ marginTop: '2rem', background: '#eee', padding: '1rem' }}>
+        <div style={{ marginTop: '2rem', background: '#eee', padding: '1rem', borderRadius: '0.5rem' }}>
           <strong>Flip:</strong>
           <p>{flip}</p>
         </div>

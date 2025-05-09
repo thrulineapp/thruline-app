@@ -9,9 +9,9 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Missing OpenAI API key' });
   }
 
-  try {
-    const prompt = `Reframe this thought in a ${tone} tone:\n\n"${input}"\n\nFlip:`;
+  const prompt = `Reframe this thought in a ${tone} tone:\n\n"${input}"\n\nFlip:`;
 
+  try {
     const response = await fetch('https://api.openai.com/v1/completions', {
       method: 'POST',
       headers: {
@@ -28,14 +28,20 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    if (data.error) {
-      return res.status(500).json({ error: data.error.message });
+    if (!response.ok) {
+      return res.status(500).json({
+        error: data.error?.message || 'OpenAI API error',
+      });
     }
 
-    const flip = data.choices?.[0]?.text?.trim() || 'No flip found. Try again.';
-    res.status(200).json({ flip });
+    const flip = data.choices?.[0]?.text?.trim();
+    if (!flip) {
+      return res.status(500).json({ error: 'No flip returned from OpenAI' });
+    }
+
+    return res.status(200).json({ flip });
   } catch (err) {
-    console.error('OpenAI request failed:', err);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error('OpenAI API call failed:', err);
+    return res.status(500).json({ error: err.message || 'Unknown server error' });
   }
 }

@@ -14,6 +14,9 @@ module.exports = async function handler(req, res) {
   }
 
   try {
+    console.log('🧠 Input:', input);
+    console.log('🎭 Tone:', tone);
+    
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -37,7 +40,8 @@ module.exports = async function handler(req, res) {
       }),
     });
 
-    const data = await response.json();
+    const data = await response.json(); console.log('📬 
+    OpenAI Raw Response:', JSON.stringify(data, null, 2));
 
     const flip = data.choices?.[0]?.message?.content?.trim();
 

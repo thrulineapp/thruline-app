@@ -5,7 +5,11 @@ module.exports = async function handler(req, res) {
 
   const { input, tone } = req.body;
 
+  console.log('🧠 Input:', input);
+  console.log('🎭 Tone:', tone);
+
   if (!process.env.OPENAI_API_KEY) {
+    console.error('❌ Missing OpenAI API key');
     return res.status(500).json({ error: 'Missing OpenAI API key' });
   }
 
@@ -14,9 +18,6 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    console.log('🧠 Input:', input);
-    console.log('🎭 Tone:', tone);
-    
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -40,8 +41,8 @@ module.exports = async function handler(req, res) {
       }),
     });
 
-    const data = await response.json(); console.log('📬 
-    OpenAI Raw Response:', JSON.stringify(data, null, 2));
+    const data = await response.json();
+    console.log('📬 OpenAI Raw Response:', JSON.stringify(data, null, 2));
 
     const flip = data.choices?.[0]?.message?.content?.trim();
 
@@ -51,6 +52,7 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({ flip });
   } catch (err) {
+    console.error('🚨 OpenAI API call failed:', err);
     return res.status(500).json({ error: err.message || 'Unknown server error' });
   }
 };
